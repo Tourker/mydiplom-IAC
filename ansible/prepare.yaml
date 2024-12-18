@@ -1,0 +1,28 @@
+- name: Prepare install
+  hosts: master
+  tasks:
+    - name: Update and upgrade apt packages
+      become: true
+      ansible.builtin.apt:
+        upgrade: yes
+        update_cache: yes
+    - name: Install pip
+      become: true
+      ansible.builtin.apt:
+        name: python3-pip
+        state: present
+    - name: Install python3.10-venv
+      become: true
+      ansible.builtin.apt:
+        name: python3.10-venv
+        state: present
+    - name: Install git
+      become: true
+      ansible.builtin.apt:
+        name: git
+        state: present
+    - name: Install Curl
+      become: true
+      ansible.builtin.apt:
+        name: curl
+        state: present

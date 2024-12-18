@@ -1,0 +1,22 @@
+- name: Config kube
+  hosts: master
+  become: true
+  tasks:
+    - name: Make dir Kube
+      become: true
+      ansible.builtin.command:
+        cmd: mkdir /home/ubuntu/.kube
+        chdir: /home/ubuntu
+    - name: copy config
+      become: true
+      ansible.builtin.copy:
+        src: /etc/kubernetes/admin.conf
+        dest: /home/ubuntu/.kube/config
+        remote_src: true
+    - name: chown to username you login and chmod as required
+      become: true
+      ansible.builtin.file:
+        path: /home/ubuntu/.kube/config
+        owner: ubuntu
+        group: ubuntu
+        mode: 0644

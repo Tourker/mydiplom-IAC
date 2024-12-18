@@ -1,0 +1,43 @@
+- name: Install Kubespray
+  hosts: master
+  tasks:
+    - name: Copy ssh key
+      become: true
+      ansible.builtin.copy:
+        src: ~/.ssh/id_ed25519
+        dest: /home/ubuntu/.ssh/id_ed25519
+    - name: Clone Kubespray.git
+      ansible.builtin.git:
+        repo: https://github.com/kubernetes-sigs/kubespray.git
+        dest: /home/ubuntu/kubespray
+        clone: yes
+        update: yes
+    - name: chown to username
+      become: true
+      ansible.builtin.command:
+        cmd: chown -R ubuntu:ubuntu /home/ubuntu/kubespray
+    - name: Install requirements
+      ansible.builtin.command:
+        cmd: python3 -m pip install -r requirements.txt
+        chdir: /home/ubuntu/kubespray
+    - name: make dir mycluster
+      ansible.builtin.copy:
+        src: /home/ubuntu/kubespray/inventory/sample/group_vars
+        dest: /home/ubuntu/kubespray/inventory/mycluster
+        remote_src: true
+    - name: Copy hosts
+      ansible.builtin.copy:
+        src: inventory.yml
+        dest: /home/ubuntu/kubespray/inventory/mycluster/inventory.yml
+    - name: Install ruamel
+      ansible.builtin.command:
+        cmd: pip3 install ruamel.yaml
+    - name: Download helm
+      ansible.builtin.command:
+        cmd: curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+    - name: chmod script
+      ansible.builtin.command:
+        cmd: chmod 700 get_helm.sh
+    - name: run install helm
+      ansible.builtin.command:
+        cmd: ./get_helm.sh

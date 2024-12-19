@@ -25,8 +25,8 @@ yc config set folder-id $folder_id
 #Экспорт необходимых переменнных окружения
 export YC_CLOUD_ID="$(yc config get cloud-id)"
 export YC_FOLDER_ID="$(yc config get folder-id)"
-export AWS_ACCESS_KEY="$(grep 'key_id' ./access-key.json | awk '{print $2}' | tr -d \")"
-export AWS_SECRET_KEY="$(grep 'secret' ./access-key.json | awk '{print $2}' | tr -d \")"
+export ACCESS_KEY="$(grep 'key_id' ./access-key.json | awk '{print $2}' | tr -d \")"
+export SECRET_KEY="$(grep 'secret' ./access-key.json | awk '{print $2}' | tr -d \")"
 export TF_VAR_account_id=$sa_id
 export TF_VAR_folder_id="$(yc config get cloud-id)"
 export TF_VAR_cloud_id="$(yc config get folder-id)"
